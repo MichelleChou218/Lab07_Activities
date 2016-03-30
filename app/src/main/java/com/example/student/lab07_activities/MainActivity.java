@@ -13,6 +13,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int SELECT_COLOR_REQUEST = 0;
     private static final int EDIT_TEXT_REQUEST = 1;
 
+    private int m_color = 0xFFFFFFFF;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,15 +39,15 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == SELECT_COLOR_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Bundle bundle = data.getExtras();
-                int colorInt = bundle.getInt(ColorPickerActivity.BUNDLE_KEY_COLOR_INT);
+                m_color = bundle.getInt(ColorPickerActivity.BUNDLE_KEY_COLOR_INT);
                 CharSequence colorName = bundle.getCharSequence(ColorPickerActivity.BUNDLE_KEY_COLOR_NAME);
 
                 TextView tv_color = (TextView)findViewById(R.id.tv_color);
+                tv_color.setGravity(Gravity.CENTER);
                 tv_color.setText(colorName);
-                tv_color.setBackgroundColor(colorInt);
 
                 ScrollView scrollView = (ScrollView)findViewById(R.id.scroll_view);
-                scrollView.setBackgroundColor(colorInt);
+                scrollView.setBackgroundColor(m_color);
             }
         } else if(requestCode == EDIT_TEXT_REQUEST) {
             if(requestCode == RESULT_OK) {
@@ -59,5 +61,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void next(View view) {
+        Intent intent = new Intent(this, Activity1.class);
+        intent.putExtra(ColorPickerActivity.BUNDLE_KEY_COLOR_INT, m_color);
+        startActivity(intent);
     }
 }
