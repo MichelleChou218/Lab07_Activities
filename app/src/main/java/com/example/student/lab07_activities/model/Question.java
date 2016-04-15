@@ -1,4 +1,4 @@
-package com.example.student.lab07_activities;
+package com.example.student.lab07_activities.model;
 
 /**
  * Created by student on 2016/4/12.

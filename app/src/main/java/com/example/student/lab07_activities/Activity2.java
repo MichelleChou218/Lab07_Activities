@@ -1,63 +1,23 @@
 package com.example.student.lab07_activities;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.TextView;
-
-public class Activity2 extends AppCompatActivity {
-//    private TextView m_tv_main_activity_message;
-
-    public static final String Q2_ANSWER_KEY = "Q2";
-
-    private TextView m_tv_no;
-    private TextView m_tv_question;
-    private Button m_radio_a;
-    private Button m_radio_b;
-    private Button m_radio_c;
-
-    private CharSequence m_answer;
+public class Activity2 extends QuestionActivity {
+    @Override
+    protected Class getBackActivityClass() {
+        return Activity1.class;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_2);
-        init();
+    protected Class getNextActivityClass() {
+        return Activity3.class;
     }
 
-    private void init() {
-        m_tv_no = (TextView)findViewById(R.id.tv_no);
-        m_tv_question = (TextView)findViewById(R.id.tv_question);
-        m_radio_a = (RadioButton)findViewById(R.id.radio_a);
-        m_radio_b = (RadioButton)findViewById(R.id.radio_b);
-        m_radio_c = (RadioButton)findViewById(R.id.radio_c);
-
-        int index = 1;
-        String no = String.valueOf(index + 1);
-        m_tv_no.setText(no);
-
-        QuestionAdapter adapter = QuestionAdapterFactory.getQuestionAdapter();
-        m_tv_question.setText(adapter.getQuestion(index));
-        m_radio_a.setText(adapter.getQuestionOptionA(index));
-        m_radio_b.setText(adapter.getQuestionOptionB(index));
-        m_radio_c.setText(adapter.getQuestionOptionC(index));
+    @Override
+    protected int getBackButtonVisibility() {
+        return QuestionActivity.VISIBLE;
     }
 
-    public void back(View view) {
-        finish();
-    }
-
-    public void next(View view) {
-        Intent intent = new Intent(this, Activity3.class);
-        startActivity(intent);
-
-        overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
-    }
-
-    public void clickAnswer(View view) {
-        m_answer = view.getTag().toString();
+    @Override
+    protected int getNextButtonVisibility() {
+        return QuestionActivity.VISIBLE;
     }
 }

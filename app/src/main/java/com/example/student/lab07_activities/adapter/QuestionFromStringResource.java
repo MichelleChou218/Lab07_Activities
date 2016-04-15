@@ -1,7 +1,10 @@
-package com.example.student.lab07_activities;
+package com.example.student.lab07_activities.adapter;
 
 import android.content.res.Resources;
 import android.text.Html;
+
+import com.example.student.lab07_activities.model.Question;
+import com.example.student.lab07_activities.R;
 
 import java.util.ArrayList;
 import java.util.List;

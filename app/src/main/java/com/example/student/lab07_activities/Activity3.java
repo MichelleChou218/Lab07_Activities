@@ -1,58 +1,75 @@
 package com.example.student.lab07_activities;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.TextView;
 
-public class Activity3 extends AppCompatActivity {
-//    private TextView m_tv_main_activity_message;
+import com.example.student.lab07_activities.adapter.QuestionAdapter;
+import com.example.student.lab07_activities.adapter.QuestionAdapterFactory;
+import com.example.student.lab07_activities.model.UserAnswers;
+import com.example.student.lab07_activities.myapp.MyApp;
 
-    public static final String Q3_ANSWER_KEY = "Q3";
+public class Activity3 extends QuestionActivity {
 
-    private TextView m_tv_no;
-    private TextView m_tv_question;
-    private Button m_radio_a;
-    private Button m_radio_b;
-    private Button m_radio_c;
-
-    private CharSequence m_answer;
+    protected void onStart() {
+        super.onStart();
+        setNextButtonText("Finish");
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_3);
-        init();
+    protected Class getBackActivityClass() {
+        return Activity2.class;
     }
 
-    private void init() {
-        m_tv_no = (TextView)findViewById(R.id.tv_no);
-        m_tv_question = (TextView)findViewById(R.id.tv_question);
-        m_radio_a = (RadioButton)findViewById(R.id.radio_a);
-        m_radio_b = (RadioButton)findViewById(R.id.radio_b);
-        m_radio_c = (RadioButton)findViewById(R.id.radio_c);
+    @Override
+    protected Class getNextActivityClass() {
+        return null;
+    }
 
-        int index = 2;
-        String no = String.valueOf(index + 1);
-        m_tv_no.setText(no);
+    @Override
+    protected int getBackButtonVisibility() {
+        return QuestionActivity.VISIBLE;
+    }
 
+    @Override
+    protected int getNextButtonVisibility() {
+        return QuestionActivity.VISIBLE;
+    }
+
+    @Override
+    public void next(View view) {
         QuestionAdapter adapter = QuestionAdapterFactory.getQuestionAdapter();
-        m_tv_question.setText(adapter.getQuestion(index));
-        m_radio_a.setText(adapter.getQuestionOptionA(index));
-        m_radio_b.setText(adapter.getQuestionOptionB(index));
-    }
+        UserAnswers userAnswers = MyApp.getuserAnswers();
+        StringBuilder message = new StringBuilder();
 
-    public void main(View view) {
+        message.append("您的作答如下\n\n");
+        for (int i=0; i<adapter.getQuestioncount(); i++) {
+            message.append(String.valueOf(i+1))
+                    .append(": ")
+                    .append(userAnswers.getAnswer(i))
+                    .append("\n")
+                    .append(userAnswers.getDescriptions(i))
+                    .append("\n");
+        }
+        message.append("\n確定要結束?");
 
-    }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Activity3.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        QuestionActivity.resetQuestionIndex();
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-    public void back(View view) {
-        finish();
-    }
-
-    public void clickAnswer(View view) {
-        m_answer = view.getTag().toString();
+            }
+        })
+                .show();
     }
 }
