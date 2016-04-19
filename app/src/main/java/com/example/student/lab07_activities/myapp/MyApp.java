@@ -1,29 +1,27 @@
 package com.example.student.lab07_activities.myapp;
-
 import android.app.Application;
 import android.content.Context;
 
 import com.example.student.lab07_activities.model.UserAnswers;
 
-/**
- * Created by student on 2016/4/12.
- */
-public class MyApp extends Application{
+public class MyApp extends Application {
     private static Context context;
-    private static UserAnswers UserAnswers;
+    private static UserAnswers userAnswers;
 
-    public static Context getContext() {
+    // getter
+    public static Context getContext() { // 產生一個 Context (有內容的東西)
         return context;
     }
 
-    public static UserAnswers getuserAnswers() {
-        if (UserAnswers == null) {
-            UserAnswers = new UserAnswers(3);
+    // getter
+    public static UserAnswers getUserAnswers() {
+        if(userAnswers == null) {
+            userAnswers = new UserAnswers(3); // 可放3題答案
         }
-        return UserAnswers;
+        return userAnswers;
     }
-
+    // 建構子
     public MyApp() {
-        context = this;
+        context = this; // context 就是 MyApp 物件自己
     }
 }

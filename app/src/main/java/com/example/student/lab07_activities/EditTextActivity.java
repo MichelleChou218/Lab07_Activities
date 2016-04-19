@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 public class EditTextActivity extends AppCompatActivity {
 
-    public static final String BUNDL_KEY_TEXT =
+    public static final String BUNDLE_KEY_TEXT =
             "com.example.student.android.text";
 
     @Override
@@ -22,7 +22,7 @@ public class EditTextActivity extends AppCompatActivity {
         CharSequence text = editText.getText();
 
         Intent intent = new Intent();
-        intent.putExtra(BUNDL_KEY_TEXT, text);
+        intent.putExtra(BUNDLE_KEY_TEXT, text);
         setResult(RESULT_OK, intent);
         finish();
     }

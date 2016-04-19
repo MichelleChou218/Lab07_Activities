@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         } else if(requestCode == EDIT_TEXT_REQUEST) {
             if(requestCode == RESULT_OK) {
                 Bundle bundle = data.getExtras();
-                CharSequence text = bundle.getCharSequence(EditTextActivity.BUNDL_KEY_TEXT);
+                CharSequence text = bundle.getCharSequence(EditTextActivity.BUNDLE_KEY_TEXT);
                 TextView tv_color = (TextView)findViewById(R.id.tv_color);
                 tv_color.setGravity(Gravity.LEFT);
                 tv_color.setText(text);
