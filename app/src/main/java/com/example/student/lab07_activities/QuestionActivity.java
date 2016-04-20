@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +16,8 @@ import com.example.student.lab07_activities.adapter.QuestionAdapterFactory;
 import com.example.student.lab07_activities.model.UserAnswers;
 import com.example.student.lab07_activities.myapp.MyApp;
 
-public abstract class QuestionActivity extends AppCompatActivity {
+public abstract class QuestionActivity extends AppCompatActivity
+        implements QuestionAdapterFactory.Receiver{
 
     private TextView m_tv_no;
     private TextView m_tv_question;
@@ -36,6 +38,47 @@ public abstract class QuestionActivity extends AppCompatActivity {
         initQuestions();
         initBackNextButtons();
         Log.d(this.toString(), "onCreate, index = " +sQuestionIndex);
+    }
+
+    @SuppressWarnings("ResourceType")
+    private void initBackNextButtons() {
+        m_btn_back = (Button)findViewById(R.id.btn_back);
+        m_btn_next = (Button)findViewById(R.id.btn_next);
+
+        m_btn_back.setVisibility(getBackButtonVisibility());
+        m_btn_next.setVisibility(getNextButtonVisibility());
+    }
+
+    private void initQuestions() {
+        m_tv_no = (TextView)findViewById(R.id.tv_no);
+        m_tv_question = (TextView)findViewById(R.id.tv_question);
+        m_radio_a = (RadioButton)findViewById(R.id.radio_a);
+        m_radio_b = (RadioButton)findViewById(R.id.radio_b);
+        m_radio_c = (RadioButton)findViewById(R.id.radio_c);
+
+        String no = String.valueOf(sQuestionIndex + 1);
+        m_tv_no.setText(no);
+
+        if (sAdapter == null) {
+            QuestionAdapterFactory.getQuestionAdapter(this);
+        }
+    }
+
+    @Override
+    public void receiveQuestionAdapter(QuestionAdapter adapter) {
+        sAdapter = adapter;
+        updateQuestionText();
+    }
+
+    private void updateQuestionText() {
+        m_tv_question.setText(Html.fromHtml(sAdapter.
+                getQuestion(sQuestionIndex).toString()));
+        m_radio_a.setText(Html.fromHtml(sAdapter.
+                getQuestionOptionsA(sQuestionIndex).toString()));
+        m_radio_b.setText(Html.fromHtml(sAdapter.
+                getQuestionOptionsB(sQuestionIndex).toString()));
+        m_radio_c.setText(Html.fromHtml(sAdapter.
+                getQuestionOptionsC(sQuestionIndex).toString()));
     }
 
     @Override
@@ -79,34 +122,8 @@ public abstract class QuestionActivity extends AppCompatActivity {
         Log.d(this.toString(), "onRestart, index = " + sQuestionIndex);
     }
 
-    @SuppressWarnings("ResourceType")
-    private void initBackNextButtons() {
-        m_btn_back = (Button)findViewById(R.id.btn_back);
-        m_btn_next = (Button)findViewById(R.id.btn_next);
 
-        m_btn_back.setVisibility(getBackButtonVisibility());
-        m_btn_next.setVisibility(getNextButtonVisibility());
-    }
 
-    private void initQuestions() {
-        m_tv_no = (TextView)findViewById(R.id.tv_no);
-        m_tv_question = (TextView)findViewById(R.id.tv_question);
-        m_radio_a = (RadioButton)findViewById(R.id.radio_a);
-        m_radio_b = (RadioButton)findViewById(R.id.radio_b);
-        m_radio_c = (RadioButton)findViewById(R.id.radio_c);
-
-        String no = String.valueOf(sQuestionIndex + 1);
-        m_tv_no.setText(no);
-
-        if (sAdapter == null) {
-            sAdapter = QuestionAdapterFactory.getQuestionAdapter();
-        }
-
-        m_tv_question.setText(sAdapter.getQuestion(sQuestionIndex));
-        m_radio_a.setText(sAdapter.getQuestionOptionA(sQuestionIndex));
-        m_radio_b.setText(sAdapter.getQuestionOptionB(sQuestionIndex));
-        m_radio_c.setText(sAdapter.getQuestionOptionC(sQuestionIndex));
-    }
 
     private static int sLastQuestionIndex;
 
@@ -123,7 +140,7 @@ public abstract class QuestionActivity extends AppCompatActivity {
 
     public void click(View view) {
         RadioButton radio = (RadioButton)view;
-        UserAnswers userAnswers = MyApp.getuserAnswers();
+        UserAnswers userAnswers = MyApp.getUserAnswers();
         switch (radio.getId()) {
             case R.id.radio_a :
                 userAnswers.setAnswer(sQuestionIndex, 'A', radio.getText());

@@ -12,7 +12,7 @@ public interface QuestionListService {
     @GET("uc?export=down&id=0BwIdzAjvQ8FwWG5HZUxIZHJOd0k")
     Call<QuestionList>getQuestionList();
 
-    public static final Retrofit retrofit = new Retrofit.Builder()
+    Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://drive.google.com/")
             .addConverterFactory(SimpleXmlConverterFactory.create())
             .build();
