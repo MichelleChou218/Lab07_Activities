@@ -40,11 +40,11 @@ public class Activity3 extends QuestionActivity {
     @Override
     public void next(View view) {
         QuestionAdapter adapter = QuestionAdapterFactory.getQuestionAdapter();
-        UserAnswers userAnswers = MyApp.getuserAnswers();
+        UserAnswers userAnswers = MyApp.getUserAnswers();
         StringBuilder message = new StringBuilder();
 
         message.append("您的作答如下\n\n");
-        for (int i=0; i<adapter.getQuestioncount(); i++) {
+        for (int i=0; i<adapter.getQuestionCount(); i++) {
             message.append(String.valueOf(i+1))
                     .append(": ")
                     .append(userAnswers.getAnswer(i))

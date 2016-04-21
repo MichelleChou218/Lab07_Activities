@@ -32,7 +32,7 @@ public class QuestionFromStringResource implements QuestionAdapter {
     }
 
     @Override
-    public int getQuestioncount() {
+    public int getQuestionCount() {
         return list.size();
     }
 
@@ -44,17 +44,17 @@ public class QuestionFromStringResource implements QuestionAdapter {
     }
 
     @Override
-    public CharSequence getQuestionOptionA(int index) {
+    public CharSequence getQuestionOptionsA(int index) {
         return Html.fromHtml(list.get(index).getOptionA());
     }
 
     @Override
-    public CharSequence getQuestionOptionB(int index) {
+    public CharSequence getQuestionOptionsB(int index) {
         return Html.fromHtml(list.get(index).getOptionB());
     }
 
     @Override
-    public CharSequence getQuestionOptionC(int index) {
+    public CharSequence getQuestionOptionsC(int index) {
         return Html.fromHtml(list.get(index).getOptionC());
     }
 }

@@ -17,8 +17,11 @@ public class Question {
     @Element
     private String optionC;
 
+    public Question() {
+    }
+
     public Question(String question, String optionA, String optionB, String optionC) {
-        this.description = question;
+        this.description = description;
         this.optionA = optionA;
         this.optionB = optionB;
         this.optionC = optionC;

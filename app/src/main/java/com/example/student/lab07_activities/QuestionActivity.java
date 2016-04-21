@@ -34,7 +34,7 @@ public abstract class QuestionActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_2);
+        setContentView(R.layout.activity_question);
         initQuestions();
         initBackNextButtons();
         Log.d(this.toString(), "onCreate, index = " +sQuestionIndex);
@@ -60,17 +60,26 @@ public abstract class QuestionActivity extends AppCompatActivity
         m_tv_no.setText(no);
 
         if (sAdapter == null) {
+            Log.d("sAdapter", "null");
             QuestionAdapterFactory.getQuestionAdapter(this);
         }
+        updateQuestionText();
     }
 
     @Override
     public void receiveQuestionAdapter(QuestionAdapter adapter) {
         sAdapter = adapter;
+        findViewById(R.id.pgb_loading).setVisibility(View.GONE);
         updateQuestionText();
     }
 
     private void updateQuestionText() {
+        if (sAdapter == null){
+            return;
+        }
+
+        findViewById(R.id.pgb_loading).setVisibility(View.GONE);
+
         m_tv_question.setText(Html.fromHtml(sAdapter.
                 getQuestion(sQuestionIndex).toString()));
         m_radio_a.setText(Html.fromHtml(sAdapter.
