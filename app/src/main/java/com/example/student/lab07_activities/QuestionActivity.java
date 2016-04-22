@@ -1,7 +1,9 @@
 package com.example.student.lab07_activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.IntDef;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -16,8 +18,18 @@ import com.example.student.lab07_activities.adapter.QuestionAdapterFactory;
 import com.example.student.lab07_activities.model.UserAnswers;
 import com.example.student.lab07_activities.myapp.MyApp;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 public abstract class QuestionActivity extends AppCompatActivity
         implements QuestionAdapterFactory.Receiver{
+
+    public static final String FILENAME = "QuestionActivity_UserAnswers";
+    private static final String TAG = "QuestionActivity";
+    private static UserAnswers sUserAnswers;
 
     private TextView m_tv_no;
     private TextView m_tv_question;
@@ -38,6 +50,64 @@ public abstract class QuestionActivity extends AppCompatActivity
         initQuestions();
         initBackNextButtons();
         Log.d(this.toString(), "onCreate, index = " +sQuestionIndex);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    private void sabeData() {
+        Log.d(TAG, "saveData() serialize");
+        FileOutputStream fos = null;
+        ObjectOutputStream oos = null;
+        try {
+            fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            oos = new ObjectOutputStream(fos);
+            oos.writeInt(sQuestionIndex);
+            oos.writeInt(sLastQuestionIndex);
+            oos.writeObject(sUserAnswers);
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.toString());
+        } finally {
+            if (oos != null) {
+                try {
+                    oos.close();
+                } catch (IOException e) {
+                    Log.e(TAG, e.toString());
+                }
+            }
+        }
+    }
+
+    private void restoreData() {
+        Log.d(TAG, "restoreData() deserialize");
+        FileInputStream fis = null;
+        ObjectInputStream ois = null;
+        try {
+            fis = openFileInput(FILENAME);
+            ois = new ObjectInputStream(fis);
+            sQuestionIndex = ois.readInt();
+            sLastQuestionIndex = ois.readInt();
+            sUserAnswers = (UserAnswers) ois.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, e.toString());
+        } finally {
+            if (ois != null) {
+                try {
+                    ois.close();
+                } catch (IOException e) {
+                    Log.d(TAG, e.toString());
+                }
+            }
+        }
     }
 
     @SuppressWarnings("ResourceType")

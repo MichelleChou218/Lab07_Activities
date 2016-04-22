@@ -1,9 +1,11 @@
 package com.example.student.lab07_activities.model;
 
+import java.io.Serializable;
+
 /**
  * Created by student on 2016/4/15.
  */
-public class UserAnswers {
+public class UserAnswers implements Serializable {
     private char[] answers;
     private CharSequence[] descriptions;
 
